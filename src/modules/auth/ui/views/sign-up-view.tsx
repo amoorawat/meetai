@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { OctagonAlertIcon } from "lucide-react";
+import {FaGithub, FaGoogle} from "react-icons/fa"
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useState } from "react";
@@ -208,11 +209,19 @@ export const SignUpView = () => {
                 </span>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <Button variant={"outline"} disabled={pending} type="button" className="w-full">
-                  Google
+                <Button variant={"outline"} onClick={() => {
+                  authClient.signIn.social({
+                    provider: "google"
+                  })
+                }} disabled={pending} type="button" className="w-full">
+                  <FaGoogle />
                 </Button>
-                <Button variant={"outline"} disabled={pending} type="button" className="w-full">
-                  Github
+                <Button variant={"outline"} onClick={() => {
+                  authClient.signIn.social({
+                    provider: "github"
+                  })
+                }} disabled={pending} type="button" className="w-full">
+                  <FaGithub />
                 </Button>
               </div>
               <div className="text-center text-sm">
@@ -226,7 +235,7 @@ export const SignUpView = () => {
               </div>
             </div>
           </form>
-          <div className="bg-radial from-green-700 to-green-900 relative hidden md:flex flex-col gap-y-4 items-center justify-center">
+          <div className="bg-radial from-sidebar-accent to-sidebar relative hidden md:flex flex-col gap-y-4 items-center justify-center">
             <img src="/logo.svg" alt="logo" className="h-[92px] w-[92px]" />
             <p className="text-2xl font-semibold text-white">Meet.AI</p>
           </div>
