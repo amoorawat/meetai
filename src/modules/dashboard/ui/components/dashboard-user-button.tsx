@@ -2,13 +2,16 @@
 import { GeneratedAvatar } from '@/components/generated-avatar'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { useIsMobile } from '@/hooks/use-mobile'
 import { authClient } from '@/lib/auth-client'
+import { cn } from '@/lib/utils'
 import { ChevronDownIcon, CreditCardIcon, LogOutIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 import React from 'react'
 
 export const DashboardUserButton = () => {
+    const isMobile = useIsMobile()
     const router = useRouter()
     const {data, isPending} = authClient.useSession()
 
@@ -43,7 +46,7 @@ export const DashboardUserButton = () => {
         </div>
         <ChevronDownIcon />
         </DropdownMenuTrigger>
-        <DropdownMenuContent side='right' className='w-72' align='end'>
+        <DropdownMenuContent side={isMobile ? "top" : "right"} className={cn("w-72", isMobile ? "mb-1" : "ml-0.5")} align='end'>
             <DropdownMenuLabel>
                 <div className='flex flex-col gap-1'>
                     <span className='font-medium truncate'>{data.user.name}</span>
