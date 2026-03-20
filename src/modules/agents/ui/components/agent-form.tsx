@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useState } from "react";
 
 interface AgentFormProps{
     onSuccess?: () => void;
@@ -24,8 +25,22 @@ export const AgentForm = ({initialValues, onCancel, onSuccess}: AgentFormProps) 
     const router = useRouter()
     const queryClient = useQueryClient()
 
+    
+
 
     const createAgent = useMutation(trpc.agents.create.mutationOptions({
+        onSuccess: async() => {
+            await queryClient.invalidateQueries(trpc.agents.getMany.queryOptions({}))
+
+            
+            onSuccess?.();
+        },
+        onError: (error) => {
+            toast.error(error.message)
+        }
+    }))
+
+    const updateAgent = useMutation(trpc.agents.update.mutationOptions({
         onSuccess: async() => {
             await queryClient.invalidateQueries(trpc.agents.getMany.queryOptions({}))
 
@@ -52,7 +67,7 @@ export const AgentForm = ({initialValues, onCancel, onSuccess}: AgentFormProps) 
         },
         onSubmit: ({value}) => {
             if(isEdit){
-                console.log("todo: update agent")
+                updateAgent.mutate({ ...value, id: initialValues.id})
             }else{
                 createAgent.mutate(value)
             }
@@ -63,7 +78,7 @@ export const AgentForm = ({initialValues, onCancel, onSuccess}: AgentFormProps) 
 
 
     const isEdit = !!initialValues?.id;
-    const isPending = createAgent.isPending 
+    const isPending = createAgent.isPending || updateAgent.isPending
 
     return (
         <form className="space-y-4" onSubmit={(e) => {
