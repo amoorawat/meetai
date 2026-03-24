@@ -21,11 +21,13 @@ import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } f
 
 function Command({
   className,
+  shouldFilter,
   ...props
 }: React.ComponentProps<typeof CommandPrimitive>) {
   return (
     <CommandPrimitive
       data-slot="command"
+      shouldFilter={shouldFilter}
       className={cn(
         "flex size-full flex-col overflow-hidden rounded-xl! bg-popover p-1 text-popover-foreground",
         className
@@ -60,6 +62,7 @@ function CommandDialog({
           className
         )}
         showCloseButton={showCloseButton}
+        
       >
         {children}
       </DialogContent>
@@ -72,12 +75,14 @@ function CommandResponsiveDialog({
   description = "Search for a command to run...",
   children,
   className,
+  shouldFilter = true,
   showCloseButton = false,
   ...props
 }: React.ComponentProps<typeof Dialog> & {
   title?: string
   description?: string
   className?: string
+  shouldFilter?: boolean
   showCloseButton?: boolean
 }) {
 
@@ -96,10 +101,7 @@ function CommandResponsiveDialog({
           </DrawerDescription>
         </DrawerHeader>
         <DrawerContent
-        className={cn(
-          "top-1/3 translate-y-0 overflow-hidden rounded-xl! p-0",
-          className
-        )}
+        
         
       >
         {children}
@@ -114,10 +116,8 @@ function CommandResponsiveDialog({
         <DialogDescription>{description}</DialogDescription>
       </DialogHeader>
       <DialogContent
-        className={cn(
-          "top-1/3 translate-y-0 overflow-hidden rounded-xl! p-0",
-          className
-        )}
+        
+        
         showCloseButton={showCloseButton}
       >
         {children}
